@@ -58,7 +58,8 @@ function GravatarImage( props ) {
 
 wp.blocks.registerBlock( 'myplugin/gravatar', {
 	edit: function( block ) {
-		var email = block.attributes.email;
+		var email = block.attributes.email,
+			children;
 
 		function onSubmit( event ) {
 			var input = event.target.querySelector( 'input' );
@@ -70,10 +71,12 @@ wp.blocks.registerBlock( 'myplugin/gravatar', {
 			block.setAttributes( { email: event.target.value } );
 		}
 
-		return el( 'form', { onSubmit: setEmail },
-			GravatarImage( { email: email } ),
-			el( 'input', { value: email, onBlur: onBlur } )
-		);
+		children = el( 'input', { value: email, onBlur: onBlur } );
+		if ( email ) {
+			children.unshift( GravatarImage( { email: email } ) );
+		}
+
+		return el( 'form', { onSubmit: setEmail }, children );
 	},
 	save: function( block ) {
 		return GravatarImage( { email: block.attributes.email } );
@@ -89,6 +92,7 @@ Let's briefly review a few items you might observe in the implementation:
 - When registering a new block, you must prefix its slug with a namespace for your plugin. This helps prevent conflicts when more than one plugin registers a block with the same slug.
 - You will use `createElement` to describe the structure of your block's markup. See the [Element documentation](../element/README.md) for more information.
 - Extracting `GravatarImage` to a separate function allows us to reuse it in both the editor-specific interface and the published content.
+- The `edit` function should handle any case where an attribute is unset, as in the case of the block being newly inserted, or reset to its original values
 - We only change the attributes of a block by calling the `setAttributes` helper. Never assign a value on the attributes object directly.
 
 There's a few small details that aren't obvious though:
