@@ -1,7 +1,9 @@
 export { default as Editable } from './components/editable';
 
 /**
- * Registers a block.
+ * Registers a new block provided a unique slug and an object defining its
+ * behavior. Once registered, the block is made available as an option to any
+ * editor interface where blocks are implemented.
  *
  * @param  {string} namespace Block grouping unique to package or plugin
  * @param  {string} block     Block name
@@ -12,7 +14,7 @@ export function registerBlock( namespace, block, settings ) {
 }
 
 /**
- * Returns settings associated with a block.
+ * Returns settings associated with a registered block.
  *
  * @param  {string}  namespace Block grouping unique to package or plugin
  * @param  {string}  block     Block name
