@@ -51,7 +51,7 @@ add_action( 'block_enqueue_scripts', 'gravatar_block_enqueue_scripts' );
 var el = wp.element.createElement;
 
 function GravatarImage( props ) {
-	var src = md5( props.email );
+	var src = 'https://gravatar.com/avatar/' + md5( props.email );
 
 	return el( 'img', { src: props.src } );
 }
